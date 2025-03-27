@@ -4,55 +4,64 @@ import Link from 'next/link';
 import {usePathname } from 'next/navigation';
 import { AiFillHome } from 'react-icons/ai';
 import { BsFillPersonFill } from 'react-icons/bs';
-import { SiTheodinproject } from "react-icons/si";
-import { IoMdContact } from 'react-icons/io';
+import { TbCategoryPlus } from "react-icons/tb";
+import { FaCartArrowDown } from "react-icons/fa6";
 import {motion} from 'framer-motion';
-
-
+import { useCart } from '../../context/CartContext';
 
 const NavbarSection = () => {
+    const pathname = usePathname();
+    const { cartItems } = useCart();
+    const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
     
-    const pathname = usePathname()
-   const navText = [
-    {title : "home", path : "/", icon: <AiFillHome/> },
-    {title : "Services", path : "/services", icon: <SiTheodinproject/> },
-    {title : "about", path : "/about", icon: <BsFillPersonFill/> },
-    {title : "contact", path : "/contact", icon: <IoMdContact/> }
-   ]
-
-   
+    const navText = [
+        {title : "home", path : "/", icon: <AiFillHome/> },
+        {title : "Categories", path : "/categories", icon: <TbCategoryPlus/> },
+        {title : "Carts", path : "/cart", icon: <><FaCartArrowDown/>{totalItems > 0 && <span style={{
+            position: 'absolute',
+            top: '-8px',
+            right: '-8px',
+            background: '#6366f1',
+            color: 'white',
+            borderRadius: '50%',
+            width: '18px',
+            height: '18px',
+            fontSize: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+        }}>{totalItems}</span>}</> },
+        {title : "Account", path : "/account", icon: <BsFillPersonFill/> }
+    ];
 
     return (
-       <motion.div 
-       initial={{opacity:0}}
-       animate={{opacity:1}}
-       >
-         <NavSection>
-            <ListContent>
-                {navText.map((text, index) => (
-                    <Li key={index}>
-                        <Eleme>
-                        <Link href={text.path}>
-                        <span 
-                            className={`
-                            ${pathname === text.path ? "active" : ""}
-                        icon`}>{text.icon}</span>
-                        <span 
-                            className={`
-                            ${pathname === text.path ? "textActive" : ""}  
-                        text`}>{text.title}</span>
-                        </Link>
-                        </Eleme>
-                    </Li>
-                ))}
-            </ListContent>
-        </NavSection>
-       </motion.div>
-    )
-    
+        <motion.div 
+            initial={{opacity:0}}
+            animate={{opacity:1}}
+        >
+            <NavSection>
+                <ListContent>
+                    {navText.map((text, index) => (
+                        <Li key={index}>
+                            <Eleme>
+                                <Link href={text.path}>
+                                    <span 
+                                        className={`
+                                        ${pathname === text.path ? "active" : ""}
+                                        icon`}>{text.icon}</span>
+                                    <span 
+                                        className={`
+                                        ${pathname === text.path ? "textActive" : ""}  
+                                        text`}>{text.title}</span>
+                                </Link>
+                            </Eleme>
+                        </Li>
+                    ))}
+                </ListContent>
+            </NavSection>
+        </motion.div>
+    );
 }
-
-
 
 export default NavbarSection
 
@@ -69,7 +78,7 @@ const NavSection = styled.nav`
     border-radius: 25px;
     width: 400px;
     height: 75px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.9);
     backdrop-filter: blur(10px);
     color: #fff;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
@@ -85,6 +94,7 @@ const ListContent = styled.ul`
         gap: 20px;
         width: 100%;
         text-transform: capitalize;
+        padding: 0 10px;
     `
 const Li = styled.li`
     display: flex;
@@ -147,7 +157,7 @@ const Li = styled.li`
             color: var(--background);
             opacity: 1;
             background: rgba(${()=>  Math.random() * 255},${()=>  Math.random() * 255},${()=>  Math.random() * 255},${()=>  Math.random() * 0.9});
-            color: balck;
+            color: black;
             display: flex;
             font-size: 25px;
             justify-content: center;
@@ -175,7 +185,7 @@ const Li = styled.li`
             text-align: center;
             margin-top: -15px;
             transform: translate(0px, 20px);
-
+            
             &::after {
                 content: "";
                 position: absolute;
@@ -195,7 +205,7 @@ const Li = styled.li`
             transform: translate(0px, -10px);
             position: relative;
             font-weight: 700;
-            font-size: 20px;
+            font-size: 18px;
             transition: all 0.3s ease-in-out;
 
             &::after {
@@ -225,4 +235,20 @@ const Eleme = styled.a`
         flex-direction: column;
         margin: auto;
         
-    }`
+    }
+    `
+    const CartBadge = styled(motion.span)`{
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: bold;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+`;

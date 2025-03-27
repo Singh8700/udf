@@ -1,103 +1,293 @@
-import Image from "next/image";
+'use client';
+import { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import Layout from '../components/Layout/Layout';
+import ProductCard from '../components/ProductCard/ProductCard';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+
+const HomeContainer = styled(motion.div)`
+  width: 100%;
+  overflow: hidden;
+`;
+
+const Hero = styled(motion.section)`
+  position: relative;
+  height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+  overflow: hidden;
+  margin-bottom: 4rem;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('https://images.pexels.com/photos/994523/pexels-photo-994523.jpeg?auto=compress&cs=tinysrgb&w=1920');
+    background-size: cover;
+    background-position: center 30%;
+    background-repeat: no-repeat;
+    filter: brightness(0.8);
+    z-index: -2;
+    transform: scale(1.1);
+    animation: zoomEffect 20s infinite alternate;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%);
+    z-index: -1;
+  }
+
+  @keyframes zoomEffect {
+    0% {
+      transform: scale(1);
+    }
+    100% {
+      transform: scale(1.1);
+    }
+  }
+
+  @media (max-width: 768px) {
+    height: 70vh;
+  }
+`;
+
+const HeroContent = styled(motion.div)`
+  max-width: 900px;
+  z-index: 1;
+  padding: 3rem;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  @media (max-width: 768px) {
+    padding: 2rem;
+    margin: 0 1rem;
+  }
+`;
+
+const Title = styled(motion.h1)`
+  font-size: 4rem;
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(to right, #fff, #e2e2e2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
+  }
+`;
+
+const Subtitle = styled(motion.p)`
+  font-size: 1.5rem;
+  margin-bottom: 2.5rem;
+  opacity: 0.95;
+  line-height: 1.6;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+`;
+
+const ShopNowButton = styled(motion.button)`
+  background: white;
+  color: #000;
+  border: none;
+  padding: 1.2rem 3.5rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1.2rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    background: #000;
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    padding: 1rem 2.5rem;
+    font-size: 1.1rem;
+  }
+`;
+
+const ProductSection = styled(motion.section)`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+`;
+
+const SectionTitle = styled(motion.h2)`
+  font-size: 2rem;
+  color: #333;
+  text-align: center;
+  margin-bottom: 3rem;
+  font-weight: 700;
+`;
+
+const ProductGrid = styled(motion.div)`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 2rem 0;
+`;
+
+const LoadingSpinner = styled(motion.div)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  font-size: 1.2rem;
+  color: #6366f1;
+`;
+
+const ErrorMessage = styled(motion.div)`
+  text-align: center;
+  color: #ef4444;
+  padding: 2rem;
+  background: #fee2e2;
+  border-radius: 8px;
+  margin: 2rem 0;
+`;
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 100
+    }
+  }
+};
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.js
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('https://productlist.onrender.com/All_Produts');
+        if (!response.ok) {
+          throw new Error('Failed to fetch products');
+        }
+        const data = await response.json();
+        setProducts(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  return (
+    <Layout>
+      <HomeContainer
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <Hero variants={itemVariants}>
+          <HeroContent variants={itemVariants}>
+            <Title
+              variants={itemVariants}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              Discover Your Style Journey
+            </Title>
+            <Subtitle
+              variants={itemVariants}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              Explore our curated collection of trendsetting fashion
+            </Subtitle>
+            <ShopNowButton
+              variants={itemVariants}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Shop Now
+            </ShopNowButton>
+          </HeroContent>
+        </Hero>
+
+        <ProductSection variants={itemVariants}>
+          <SectionTitle variants={itemVariants}>
+            Featured Products
+          </SectionTitle>
+          {loading ? (
+            <LoadingSpinner variants={itemVariants}>Loading products...</LoadingSpinner>
+          ) : error ? (
+            <ErrorMessage variants={itemVariants}>{error}</ErrorMessage>
+          ) : (
+            <ProductGrid variants={itemVariants}>
+              {products.map(product => (
+                <Link href={`/product/${product.id}`} key={product.id}>
+                <motion.div
+                  key={product.id}
+                  variants={itemVariants}
+                  whileHover={{ y: -5 }}
+                >
+                  <ProductCard product={{
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image
+                  }} />
+                </motion.div>
+                </Link>
+              ))}
+            </ProductGrid>
+          )}
+        </ProductSection>
+      </HomeContainer>
+    </Layout>
   );
 }
