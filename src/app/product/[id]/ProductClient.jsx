@@ -1,20 +1,20 @@
-"use client"
-import { useState } from 'react';
+'use client';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import Layout from '../../../components/Layout/Layout';
 import { useCart } from '../../../context/CartContext';
+import Layout from '../../../components/Layout/Layout';
 
 const ProductContainer = styled.div`
   max-width: 1200px;
   margin: 2rem auto;
-  padding: 0 1rem;
+  padding: 0 2rem;
 `;
 
 const ProductWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: 4rem;
+  margin-top: 2rem;
   background: white;
   border-radius: 12px;
   overflow: hidden;
@@ -23,6 +23,7 @@ const ProductWrapper = styled.div`
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
+    gap: 2rem;
   }
 `;
 

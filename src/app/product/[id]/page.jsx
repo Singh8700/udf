@@ -144,59 +144,7 @@ const LoadingSpinner = styled.div`
   }
 `;
 
-export default async function ProductPage({ params }) {
+export default async function Page({ params }) {
   const product = await getProduct(params.id);
-  const { addToCart } = useCart();
-
-  const handleAddToCart = () => {
-    if (product) {
-      addToCart({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.image,
-        quantity: 1
-      });
-    }
-  };
-
-  return (
-    <Suspense fallback={<Loading />}>
-      <Layout>
-        <ProductContainer>
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <ProductWrapper>
-              <ImageSection>
-                <ProductImage src={product.image} alt={product.name} />
-              </ImageSection>
-              <ProductInfo>
-                <div>
-                  <ProductName>{product.name}</ProductName>
-                  <ProductPrice>₹{product.price}</ProductPrice>
-                </div>
-                <ProductDescription>{product.description || 'A premium quality product.'}</ProductDescription>
-                <AddToCartButton onClick={handleAddToCart} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  Add to Cart
-                </AddToCartButton>
-                <ProductDetails>
-                  <DetailRow>
-                    <DetailLabel>Category:</DetailLabel>
-                    <DetailValue>{product.category}</DetailValue>
-                  </DetailRow>
-                  <DetailRow>
-                    <DetailLabel>Availability:</DetailLabel>
-                    <DetailValue>In Stock</DetailValue>
-                  </DetailRow>
-                  <DetailRow>
-                    <DetailLabel>SKU:</DetailLabel>
-                    <DetailValue>{product.id}</DetailValue>
-                  </DetailRow>
-                </ProductDetails>
-              </ProductInfo>
-            </ProductWrapper>
-          </motion.div>
-        </ProductContainer>
-      </Layout>
-    </Suspense>
-  );
+  return <ProductClient product={product} />;
 }

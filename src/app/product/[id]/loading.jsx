@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Layout from '../../../components/Layout/Layout';
 
 const LoadingContainer = styled.div`
   display: flex;
@@ -23,8 +24,10 @@ const LoadingSpinner = styled.div`
 
 export default function Loading() {
   return (
-    <LoadingContainer>
-      <LoadingSpinner />
-    </LoadingContainer>
+    <Layout>
+      <LoadingContainer>
+        <LoadingSpinner />
+      </LoadingContainer>
+    </Layout>
   );
 }
