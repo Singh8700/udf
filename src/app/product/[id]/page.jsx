@@ -4,6 +4,26 @@ import styled from 'styled-components';
 import Layout from '../../../components/Layout/Layout';
 import { motion } from 'framer-motion';
 import { useCart } from '../../../context/CartContext';
+import { Suspense } from 'react';
+import ProductClient from './ProductClient';
+import Loading from './loading';
+
+// Function to get all products for static paths
+export async function generateStaticParams() {
+  const res = await fetch('https://productlist.onrender.com/All_Produts');
+  const products = await res.json();
+  
+  return products.map((product) => ({
+    id: product.id.toString(),
+  }));
+}
+
+// Function to get single product data
+async function getProduct(id) {
+  const res = await fetch(`https://productlist.onrender.com/All_Produts/${id}`);
+  if (!res.ok) throw new Error('Failed to fetch product');
+  return res.json();
+}
 
 const ProductContainer = styled.div`
   max-width: 1200px;
@@ -124,26 +144,9 @@ const LoadingSpinner = styled.div`
   }
 `;
 
-export default function ProductPage({ params }) {
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
+export default async function ProductPage({ params }) {
+  const product = await getProduct(params.id);
   const { addToCart } = useCart();
-
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await fetch(`https://productlist.onrender.com/All_Produts/${params.id}`);
-        const data = await response.json();
-        setProduct(data);
-      } catch (error) {
-        console.error('Error fetching product:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProduct();
-  }, [params.id]);
 
   const handleAddToCart = () => {
     if (product) {
@@ -157,61 +160,43 @@ export default function ProductPage({ params }) {
     }
   };
 
-  if (loading) {
-    return (
-      <Layout>
-        <LoadingContainer>
-          <LoadingSpinner />
-        </LoadingContainer>
-      </Layout>
-    );
-  }
-
-  if (!product) {
-    return (
+  return (
+    <Suspense fallback={<Loading />}>
       <Layout>
         <ProductContainer>
-          <h1>Product not found</h1>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <ProductWrapper>
+              <ImageSection>
+                <ProductImage src={product.image} alt={product.name} />
+              </ImageSection>
+              <ProductInfo>
+                <div>
+                  <ProductName>{product.name}</ProductName>
+                  <ProductPrice>₹{product.price}</ProductPrice>
+                </div>
+                <ProductDescription>{product.description || 'A premium quality product.'}</ProductDescription>
+                <AddToCartButton onClick={handleAddToCart} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  Add to Cart
+                </AddToCartButton>
+                <ProductDetails>
+                  <DetailRow>
+                    <DetailLabel>Category:</DetailLabel>
+                    <DetailValue>{product.category}</DetailValue>
+                  </DetailRow>
+                  <DetailRow>
+                    <DetailLabel>Availability:</DetailLabel>
+                    <DetailValue>In Stock</DetailValue>
+                  </DetailRow>
+                  <DetailRow>
+                    <DetailLabel>SKU:</DetailLabel>
+                    <DetailValue>{product.id}</DetailValue>
+                  </DetailRow>
+                </ProductDetails>
+              </ProductInfo>
+            </ProductWrapper>
+          </motion.div>
         </ProductContainer>
       </Layout>
-    );
-  }
-
-  return (
-    <Layout>
-      <ProductContainer>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <ProductWrapper>
-            <ImageSection>
-              <ProductImage src={product.image} alt={product.name} />
-            </ImageSection>
-            <ProductInfo>
-              <div>
-                <ProductName>{product.name}</ProductName>
-                <ProductPrice>₹{product.price}</ProductPrice>
-              </div>
-              <ProductDescription>{product.description || 'A premium quality product.'}</ProductDescription>
-              <AddToCartButton onClick={handleAddToCart} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                Add to Cart
-              </AddToCartButton>
-              <ProductDetails>
-                <DetailRow>
-                  <DetailLabel>Category:</DetailLabel>
-                  <DetailValue>{product.category}</DetailValue>
-                </DetailRow>
-                <DetailRow>
-                  <DetailLabel>Availability:</DetailLabel>
-                  <DetailValue>In Stock</DetailValue>
-                </DetailRow>
-                <DetailRow>
-                  <DetailLabel>SKU:</DetailLabel>
-                  <DetailValue>{product.id}</DetailValue>
-                </DetailRow>
-              </ProductDetails>
-            </ProductInfo>
-          </ProductWrapper>
-        </motion.div>
-      </ProductContainer>
-    </Layout>
+    </Suspense>
   );
 }
