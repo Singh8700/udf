@@ -1,7 +1,9 @@
-'use client';
+"use client";
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Layout from '../../components/Layout/Layout';
 import ProductCard from '../../components/ProductCard/ProductCard';
+import { motion } from 'framer-motion';
 
 const ProductsContainer = styled.div`
   max-width: 1200px;
@@ -13,100 +15,141 @@ const FilterSection = styled.div`
   display: flex;
   gap: 1rem;
   margin-bottom: 2rem;
+  flex-wrap: wrap;
 `;
 
-const FilterButton = styled.button`
-  padding: 0.5rem 1rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: ${props => props.active ? '#333' : 'white'};
-  color: ${props => props.active ? 'white' : '#333'};
+const FilterButton = styled(motion.button)`
+  padding: 0.5rem 1.5rem;
+  border: 2px solid #6366f1;
+  border-radius: 25px;
+  background: ${props => props.active ? '#6366f1' : 'transparent'};
+  color: ${props => props.active ? 'white' : '#6366f1'};
   cursor: pointer;
-  
+  font-weight: 500;
+  transition: all 0.3s ease;
+
   &:hover {
-    background: ${props => props.active ? '#444' : '#f5f5f5'};
+    background: #6366f1;
+    color: white;
   }
 `;
 
 const ProductGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
+  margin-top: 2rem;
 `;
 
-// Sample product data (replace with actual API call in production)
-const products = [
-  {
-    id: 1,
-    name: "Classic White T-Shirt",
-    price: 599,
-    category: "t-shirts",
-    image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-  },
-  {
-    id: 2,
-    name: "Black Denim Jeans",
-    price: 1299,
-    category: "jeans",
-    image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-  },
-  {
-    id: 3,
-    name: "Casual Sneakers",
-    price: 999,
-    category: "shoes",
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-  },
-  {
-    id: 4,
-    name: "Summer Dress",
-    price: 1499,
-    category: "dresses",
-    image: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-  },
-  {
-    id: 5,
-    name: "Blue Jeans",
-    price: 1199,
-    category: "jeans",
-    image: "https://images.unsplash.com/photo-1542272604-787c3835535d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-  },
-  {
-    id: 6,
-    name: "Striped T-Shirt",
-    price: 699,
-    category: "t-shirts",
-    image: "https://images.unsplash.com/photo-1503341504253-dff4815485f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+`;
+
+const LoadingSpinner = styled.div`
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #6366f1;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
-];
+`;
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
 
 export default function Products() {
-  const categories = ['all', ...new Set(products.map(p => p.category))];
-  const [activeCategory, setActiveCategory] = React.useState('all');
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState('all');
+  const [categories, setCategories] = useState([]);
 
-  const filteredProducts = activeCategory === 'all' 
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('https://productlist.onrender.com/All_Produts');
+        const data = await response.json();
+        setProducts(data);
+        
+        // Extract unique categories
+        const uniqueCategories = [...new Set(data.map(product => product.category))];
+        setCategories(uniqueCategories);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  const filteredProducts = filter === 'all' 
     ? products 
-    : products.filter(p => p.category === activeCategory);
+    : products.filter(product => product.category === filter);
+
+  if (loading) {
+    return (
+      <Layout>
+        <LoadingContainer>
+          <LoadingSpinner />
+        </LoadingContainer>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
       <ProductsContainer>
         <FilterSection>
+          <FilterButton
+            as={motion.button}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            active={filter === 'all'}
+            onClick={() => setFilter('all')}
+          >
+            All Products
+          </FilterButton>
           {categories.map(category => (
             <FilterButton
               key={category}
-              active={category === activeCategory}
-              onClick={() => setActiveCategory(category)}
+              as={motion.button}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              active={filter === category}
+              onClick={() => setFilter(category)}
             >
-              {category.charAt(0).toUpperCase() + category.slice(1)}
+              {category}
             </FilterButton>
           ))}
         </FilterSection>
-        <ProductGrid>
-          {filteredProducts.map(product => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </ProductGrid>
+
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <ProductGrid>
+            {filteredProducts.map(product => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </ProductGrid>
+        </motion.div>
       </ProductsContainer>
     </Layout>
   );

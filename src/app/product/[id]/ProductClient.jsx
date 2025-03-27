@@ -1,21 +1,20 @@
-"use client";
-import { useState, useEffect } from 'react';
+"use client"
+import { useState } from 'react';
 import styled from 'styled-components';
-import Layout from '../../../components/Layout/Layout';
 import { motion } from 'framer-motion';
+import Layout from '../../../components/Layout/Layout';
 import { useCart } from '../../../context/CartContext';
 
 const ProductContainer = styled.div`
   max-width: 1200px;
   margin: 2rem auto;
-  padding: 0 2rem;
+  padding: 0 1rem;
 `;
 
 const ProductWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  margin-top: 2rem;
+  gap: 2rem;
   background: white;
   border-radius: 12px;
   overflow: hidden;
@@ -24,7 +23,6 @@ const ProductWrapper = styled.div`
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
-    gap: 2rem;
   }
 `;
 
@@ -103,79 +101,18 @@ const DetailValue = styled.span`
   color: #666;
 `;
 
-const LoadingContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 60vh;
-`;
-
-const LoadingSpinner = styled.div`
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #6366f1;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-`;
-
-export default function ProductPage({ params }) {
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
+export default function ProductClient({ product }) {
   const { addToCart } = useCart();
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await fetch(`https://productlist.onrender.com/All_Produts/${params.id}`);
-        const data = await response.json();
-        setProduct(data);
-      } catch (error) {
-        console.error('Error fetching product:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProduct();
-  }, [params.id]);
-
   const handleAddToCart = () => {
-    if (product) {
-      addToCart({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.image,
-        quantity: 1
-      });
-    }
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      quantity: 1
+    });
   };
-
-  if (loading) {
-    return (
-      <Layout>
-        <LoadingContainer>
-          <LoadingSpinner />
-        </LoadingContainer>
-      </Layout>
-    );
-  }
-
-  if (!product) {
-    return (
-      <Layout>
-        <ProductContainer>
-          <h1>Product not found</h1>
-        </ProductContainer>
-      </Layout>
-    );
-  }
 
   return (
     <Layout>
