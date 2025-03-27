@@ -1,5 +1,4 @@
 'use client';
-import React from 'react';
 import styled from 'styled-components';
 import Layout from '../../components/Layout/Layout';
 import { useCart } from '../../context/CartContext';
