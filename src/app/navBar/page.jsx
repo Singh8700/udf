@@ -7,7 +7,7 @@ import { BsFillPersonFill } from 'react-icons/bs';
 import { TbCategoryPlus } from "react-icons/tb";
 import { FaCartArrowDown } from "react-icons/fa6";
 import {motion} from 'framer-motion';
-import { useCart } from '../../context/CartContext';
+import { useCart } from '../../context/CartContext.jsx';
 
 const NavbarSection = () => {
     const pathname = usePathname();
@@ -16,8 +16,8 @@ const NavbarSection = () => {
     
     const navText = [
         {title : "home", path : "/", icon: <AiFillHome/> },
-        {title : "Categories", path : "/categories", icon: <TbCategoryPlus/> },
-        {title : "Carts", path : "/cart", icon: <><FaCartArrowDown/>{totalItems > 0 && <span style={{
+        {title : "Categories", path : "/categories/", icon: <TbCategoryPlus/> },
+        {title : "Carts", path : "/cart/", icon: <><FaCartArrowDown/>{totalItems > 0 && <span style={{
             position: 'absolute',
             top: '-8px',
             right: '-8px',
@@ -31,7 +31,7 @@ const NavbarSection = () => {
             alignItems: 'center',
             justifyContent: 'center'
         }}>{totalItems}</span>}</> },
-        {title : "Account", path : "/account", icon: <BsFillPersonFill/> }
+        {title : "Account", path : "/account/", icon: <BsFillPersonFill/> }
     ];
 
     return (

@@ -1,7 +1,7 @@
 'use client';
 import styled from 'styled-components';
 import Layout from '../../components/Layout/Layout';
-import { useCart } from '../../context/CartContext';
+import { useCart } from '../../context/CartContext.jsx';
 import { motion } from 'framer-motion';
 import { FiMinus, FiPlus, FiTrash2, FiShoppingBag } from 'react-icons/fi';
 

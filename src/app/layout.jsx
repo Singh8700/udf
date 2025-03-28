@@ -1,6 +1,6 @@
 import "./globals.css";
 import Navbar from "./navBar/page";
-import { CartProvider } from '../context/CartContext';
+import { CartProvider } from '../context/CartContext.jsx';
 // import StyledComponentsRegistry from './registry';
 
 export const metadata = {
@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
       >
         
           <CartProvider>
-            <Navbar/>
+            
             {children}
           </CartProvider>
        

@@ -1,6 +1,6 @@
 "use client"
 import styled from 'styled-components';
-import { useCart } from '../../context/CartContext';
+import { useCart } from '../../context/CartContext.jsx';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { FiShoppingCart, FiCreditCard } from 'react-icons/fi';

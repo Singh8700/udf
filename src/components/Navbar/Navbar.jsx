@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { useCart } from '../../context/CartContext';
+import { useCart } from '../../context/CartContext.jsx';
 import { FiShoppingCart, FiMenu, FiX } from 'react-icons/fi';
 
 const Nav = styled.nav`

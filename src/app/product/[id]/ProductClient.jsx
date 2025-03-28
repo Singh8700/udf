@@ -1,106 +1,7 @@
-'use client';
-import styled from 'styled-components';
+"use client";
 import { motion } from 'framer-motion';
-import { useCart } from '../../../context/CartContext';
-import Layout from '../../../components/Layout/Layout';
-
-const ProductContainer = styled.div`
-  max-width: 1200px;
-  margin: 2rem auto;
-  padding: 0 2rem;
-`;
-
-const ProductWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  margin-top: 2rem;
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-`;
-
-const ImageSection = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #f8f9fa;
-  border-radius: 8px;
-  padding: 1rem;
-`;
-
-const ProductImage = styled.img`
-  max-width: 100%;
-  height: auto;
-  object-fit: contain;
-  border-radius: 8px;
-`;
-
-const ProductInfo = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-`;
-
-const ProductName = styled.h1`
-  font-size: 2rem;
-  font-weight: 600;
-  color: #333;
-  margin: 0;
-`;
-
-const ProductPrice = styled.div`
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #6366f1;
-`;
-
-const ProductDescription = styled.p`
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #666;
-`;
-
-const AddToCartButton = styled(motion.button)`
-  background: #6366f1;
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 8px;
-  cursor: pointer;
-  width: fit-content;
-`;
-
-const ProductDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 1rem;
-`;
-
-const DetailRow = styled.div`
-  display: flex;
-  gap: 1rem;
-`;
-
-const DetailLabel = styled.span`
-  font-weight: 600;
-  color: #333;
-  min-width: 100px;
-`;
-
-const DetailValue = styled.span`
-  color: #666;
-`;
+import { useCart } from '../../../context/CartContext.jsx';
+import styles from './product.module.css';
 
 export default function ProductClient({ product }) {
   const { addToCart } = useCart();
@@ -116,40 +17,49 @@ export default function ProductClient({ product }) {
   };
 
   return (
-    <Layout>
-      <ProductContainer>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-          <ProductWrapper>
-            <ImageSection>
-              <ProductImage src={product.image} alt={product.name} />
-            </ImageSection>
-            <ProductInfo>
-              <div>
-                <ProductName>{product.name}</ProductName>
-                <ProductPrice>₹{product.price}</ProductPrice>
+    <div className={styles.productContainer}>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <div className={styles.productWrapper}>
+          <div className={styles.imageSection}>
+            <img className={styles.productImage} src={product.image} alt={product.name} />
+          </div>
+          <div className={styles.productInfo}>
+            <div>
+              <h1 className={styles.productName}>{product.name}</h1>
+              <div className={styles.productPrice}>₹{product.price}</div>
+            </div>
+            <p className={styles.productDescription}>
+              {product.description || 'A premium quality product designed for your needs.'}
+            </p>
+            <motion.button
+              className={styles.addToCartButton}
+              onClick={handleAddToCart}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Add to Cart
+            </motion.button>
+            <div className={styles.productDetails}>
+              <div className={styles.detailRow}>
+                <span className={styles.detailLabel}>Category:</span>
+                <span className={styles.detailValue}>{product.category}</span>
               </div>
-              <ProductDescription>{product.description || 'A premium quality product.'}</ProductDescription>
-              <AddToCartButton onClick={handleAddToCart} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                Add to Cart
-              </AddToCartButton>
-              <ProductDetails>
-                <DetailRow>
-                  <DetailLabel>Category:</DetailLabel>
-                  <DetailValue>{product.category}</DetailValue>
-                </DetailRow>
-                <DetailRow>
-                  <DetailLabel>Availability:</DetailLabel>
-                  <DetailValue>In Stock</DetailValue>
-                </DetailRow>
-                <DetailRow>
-                  <DetailLabel>SKU:</DetailLabel>
-                  <DetailValue>{product.id}</DetailValue>
-                </DetailRow>
-              </ProductDetails>
-            </ProductInfo>
-          </ProductWrapper>
-        </motion.div>
-      </ProductContainer>
-    </Layout>
+              <div className={styles.detailRow}>
+                <span className={styles.detailLabel}>Availability:</span>
+                <span className={styles.detailValue}>In Stock</span>
+              </div>
+              <div className={styles.detailRow}>
+                <span className={styles.detailLabel}>SKU:</span>
+                <span className={styles.detailValue}>{product.id}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </div>
   );
 }
