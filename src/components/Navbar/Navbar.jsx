@@ -63,6 +63,12 @@ const NavLinks = styled.div`
   }
 `;
 
+const Options = styled(motion.div)`
+  width:30%;
+  display:flex;
+  justify-content:space-around;
+`
+
 const NavLink = styled(motion.a)`
   color: #333;
   text-decoration: none;
@@ -94,19 +100,21 @@ const CartIcon = styled(motion.div)`
   position: relative;
   cursor: pointer;
   display: flex;
-  align-items: center;
+  justify-content:flex-end;
   gap: 0.5rem;
   color: #333;
   font-size: 1.5rem;
   z-index: 100;
-
-  @media (max-width: 480px) {
-    font-size: 1.3rem;
+  @media (max-width: 780px) {
+   position: absolute;
+  right:10%;
+  top:50%;
+  transform:translate(-50%,-50%);
   }
 `;
 
 const CartCount = styled(motion.span)`
-  position: absolute;
+  position: fixed;
   top: -8px;
   right: -8px;
   background: #6366f1;
@@ -117,7 +125,6 @@ const CartCount = styled(motion.span)`
   border-radius: 9999px;
   min-width: 20px;
   text-align: center;
-
   @media (max-width: 480px) {
     font-size: 0.7rem;
     min-width: 18px;
@@ -160,7 +167,8 @@ const Navbar = () => {
             Unique Designs Fashion
           </Logo>
         </Link>
-        <NavLinks isOpen={isMenuOpen}>
+       <Options>
+       <NavLinks isOpen={isMenuOpen}>
           <Link href="/products" passHref>
             <NavLink
               whileHover={{ y: -2 }}
@@ -182,8 +190,7 @@ const Navbar = () => {
         </NavLinks>
         <CartIcon 
           onClick={() => router.push('/cart')}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
+          
         >
           <FiShoppingCart />
           {totalItems > 0 && (
@@ -196,6 +203,7 @@ const Navbar = () => {
             </CartCount>
           )}
         </CartIcon>
+       </Options>
         <MenuButton
           onClick={toggleMenu}
           whileTap={{ scale: 0.95 }}

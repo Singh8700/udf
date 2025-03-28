@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Layout from '../components/Layout/Layout';
 import ProductCard from '../components/ProductCard/ProductCard';
@@ -7,21 +7,24 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 const HomeContainer = styled(motion.div)`
-  width: 100%;
-  overflow: hidden;
+  width: 100vw;
+  overflow-x: hidden;
 `;
 
 const Hero = styled(motion.section)`
   position: relative;
-  height: 90vh;
+  height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   text-align: center;
-  overflow: hidden;
   margin-bottom: 4rem;
-
+  background-image: url('./images/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: brightness(0.9);
   &::before {
     content: '';
     position: absolute;
@@ -29,14 +32,23 @@ const Hero = styled(motion.section)`
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: url('https://images.pexels.com/photos/994523/pexels-photo-994523.jpeg?auto=compress&cs=tinysrgb&w=1920');
+    background-image: url('./images/hero-bg.jpg');
     background-size: cover;
-    background-position: center 30%;
+    background-position: center;
     background-repeat: no-repeat;
     filter: brightness(0.8);
     z-index: -2;
     transform: scale(1.1);
     animation: zoomEffect 20s infinite alternate;
+  }
+
+  @keyframes zoomEffect {
+    from {
+      transform: scale(1.1);
+    }
+    to {
+      transform: scale(1.2);
+    }
   }
 
   &::after {
@@ -48,15 +60,6 @@ const Hero = styled(motion.section)`
     bottom: 0;
     background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 100%);
     z-index: -1;
-  }
-
-  @keyframes zoomEffect {
-    0% {
-      transform: scale(1);
-    }
-    100% {
-      transform: scale(1.1);
-    }
   }
 
   @media (max-width: 768px) {
@@ -90,7 +93,7 @@ const Title = styled(motion.h1)`
   -webkit-text-fill-color: transparent;
   
   @media (max-width: 768px) {
-    font-size: 2.5rem;
+    font-size: 3rem;
   }
 `;
 
@@ -137,12 +140,15 @@ const ShopNowButton = styled(motion.button)`
 const ProductSection = styled(motion.section)`
   max-width: 1200px;
   margin: 0 auto;
+  margin-top: 8rem;
   padding: 0 2rem;
+  scroll-margin-top: 100px;
 `;
 
 const SectionTitle = styled(motion.h2)`
   font-size: 2rem;
-  color: #333;
+  color: #888;
+  font-family:Georgia, 'Times New Roman', Times, serif;
   text-align: center;
   margin-bottom: 3rem;
   font-weight: 700;
@@ -200,6 +206,7 @@ export default function Home() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const featuredSectionRef = useRef(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -219,6 +226,10 @@ export default function Home() {
 
     fetchProducts();
   }, []);
+
+  const handleShopNowClick = () => {
+    featuredSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <Layout>
@@ -252,13 +263,20 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.4 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
+              onClick={handleShopNowClick}
             >
               Shop Now
             </ShopNowButton>
           </HeroContent>
         </Hero>
 
-        <ProductSection variants={itemVariants}>
+        <ProductSection
+          ref={featuredSectionRef}
+          variants={itemVariants}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
           <SectionTitle variants={itemVariants}>
             Featured Products
           </SectionTitle>
