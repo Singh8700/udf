@@ -31,7 +31,7 @@ const NavbarSection = () => {
             alignItems: 'center',
             justifyContent: 'center'
         }}>{totalItems}</span>}</> },
-        {title : "Account", path : "/account/", icon: <BsFillPersonFill/> }
+        // {title : "Account", path : "/account/", icon: <BsFillPersonFill/> }
     ];
 
     return (

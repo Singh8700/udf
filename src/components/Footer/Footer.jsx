@@ -198,9 +198,9 @@ const Footer = () => {
           <Link href="/cart" passHref>
             <FooterLink variants={itemVariants}>Cart</FooterLink>
           </Link>
-          <Link href="/account" passHref>
+          {/* <Link href="/account" passHref>
             <FooterLink variants={itemVariants}>My Account</FooterLink>
-          </Link>
+          </Link> */}
         </FooterSection>
 
         <FooterSection
