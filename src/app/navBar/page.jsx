@@ -93,6 +93,7 @@ const ListContent = styled.ul`
         align-items: center;
         gap: 20px;
         width: 100%;
+        color:#fff;
         text-transform: capitalize;
         padding: 0 10px;
     `
@@ -102,6 +103,7 @@ const Li = styled.li`
     align-items: center;
     width: 20%;
     // background: red;
+    color:#fff;
     position: relative;
     // overflow-x: hidden;
     transition: all 0.3s ease-in-out;
@@ -183,6 +185,7 @@ const Li = styled.li`
             justify-content: center;
             align-items: center;
             text-align: center;
+            color:#fff;
             margin-top: -15px;
             transform: translate(0px, 20px);
             

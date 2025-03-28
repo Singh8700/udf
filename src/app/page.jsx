@@ -70,14 +70,15 @@ const Hero = styled(motion.section)`
 const HeroContent = styled(motion.div)`
   max-width: 900px;
   z-index: 1;
-  padding: 3rem;
+  padding: 2.5rem;
   border-radius: 20px;
-  background: rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, rgba(${()=>Math.random() * 100},${()=>Math.random() * 100},${()=>Math.random() * 100},0.5),rgba(${()=>Math.random() * 200},${()=>Math.random() * 200},${()=>Math.random() * 200},0.5));
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.1);
 
   @media (max-width: 768px) {
+    width:80%;
     padding: 2rem;
     margin: 0 1rem;
   }
@@ -87,7 +88,7 @@ const Title = styled(motion.h1)`
   font-size: 4rem;
   font-weight: 800;
   margin-bottom: 1.5rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  // text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
   background: linear-gradient(to right, #fff, #e2e2e2);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

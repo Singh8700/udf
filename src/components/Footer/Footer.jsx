@@ -8,7 +8,7 @@ import { FiMail, FiPhone, FiMapPin } from 'react-icons/fi';
 const FooterContainer = styled.footer`
   background: linear-gradient(to right, #1a1a1a, #2d2d2d);
   color: #fff;
-  padding: 4rem 0 2rem 0;
+  padding: 4rem 2rem 2rem 0;
   position: relative;
   overflow: hidden;
 
@@ -85,11 +85,12 @@ const SocialLinks = styled.div`
   display: flex;
   gap: 1rem;
   margin-top: 1rem;
+  font-size:0.6rem;
 `;
 
 const SocialIcon = styled(motion.a)`
   color: #fff;
-  font-size: 1.5rem;
+  font-size: 1rem;
   padding: 0.5rem;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
@@ -164,17 +165,11 @@ const Footer = () => {
             Unique Designs Fashion - Your one-stop destination for trendy and unique fashion pieces that define your style.
           </motion.p>
           <SocialLinks>
-            <SocialIcon href="https://facebook.com" target="_blank" whileHover={{ scale: 1.1 }}>
+            <SocialIcon href="https://www.facebook.com/share/16BDTksYYW/" target="_blank" whileHover={{ scale: 1.1 }}>
               <FaFacebook />
             </SocialIcon>
-            <SocialIcon href="https://twitter.com" target="_blank" whileHover={{ scale: 1.1 }}>
-              <FaTwitter />
-            </SocialIcon>
-            <SocialIcon href="https://instagram.com" target="_blank" whileHover={{ scale: 1.1 }}>
+            <SocialIcon href="https://instagram.com/rajeshkumar96_" target="_blank" whileHover={{ scale: 1.1 }}>
               <FaInstagram />
-            </SocialIcon>
-            <SocialIcon href="https://linkedin.com" target="_blank" whileHover={{ scale: 1.1 }}>
-              <FaLinkedin />
             </SocialIcon>
           </SocialLinks>
         </FooterSection>
@@ -222,8 +217,8 @@ const Footer = () => {
           </ContactInfo>
           <ContactInfo variants={itemVariants}>
             <FiMail />
-            <a href="mailto:info@uniquedesigns.com" style={{ color: 'inherit', textDecoration: 'none' }}>
-              info@uniquedesigns.com
+            <a href="mailto:rajeshkumar887053@gmail.com" style={{ color: 'inherit', textDecoration: 'none' }}>
+            rajeshkumar887053@gmail.com
             </a>
           </ContactInfo>
         </FooterSection>

@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '../Navbar/Navbar';
 import Footer from '../Footer/Footer';
+import ContactPage from '@/app/contact/page';
 
 const MainContainer = styled(motion.div)`
   min-height: 100vh;
@@ -78,6 +79,7 @@ const Layout = ({ children }) => {
         >
           {children}
         </ContentWrapper>
+        <ContactPage/>
         <Footer />
       </MainContainer>
     </>
