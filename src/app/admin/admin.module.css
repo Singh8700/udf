@@ -2,6 +2,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  background: #000;
 }
 
 .header {
@@ -13,7 +14,7 @@
 
 .header h1 {
   font-size: 2rem;
-  color: #333;
+  color: #aaa;
 }
 
 .addButton {
@@ -50,12 +51,12 @@
 
 .productInfo h3 {
   margin: 0;
-  color: #333;
+  color: #ddd;
 }
 
 .productInfo p {
   margin: 0.5rem 0;
-  color: #666;
+  color: #999;
 }
 
 .actions {
@@ -84,7 +85,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(5px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -100,7 +102,8 @@
 
 .modal h2 {
   margin-top: 0;
-  color: #333;
+  color: #ccc;
+  text-align: center;
 }
 
 .formGroup {
@@ -110,7 +113,18 @@
 .formGroup label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #666;
+  color: #aaa;
+}
+/* Chrome, Safari, Edge, Opera */
+.formGroup input[type=number]::-webkit-inner-spin-button, 
+.formGroup input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+
+/* Firefox */
+.formGroup input[type=number] {
+    -moz-appearance: textfield;
 }
 
 .formGroup input,
@@ -119,6 +133,8 @@
   padding: 0.5rem;
   border: 1px solid #ddd;
   border-radius: 4px;
+  color:#000;
+  background: #FFF;
   font-size: 1rem;
 }
 

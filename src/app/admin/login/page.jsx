@@ -15,7 +15,7 @@ export default function AdminLogin() {
 
     // In a real application, validate against a secure backend
     // This is just a basic example
-    if (credentials.username === 'UDFAdmin' && credentials.password === 'UDF&Admin@7878') {
+    if (credentials.username == 'UDFAdmin' && credentials.password === 'UDF&Admin@7878') {
       // Set a cookie to maintain session
       document.cookie = 'admin_authenticated=true; path=/';
       router.push('/admin');
@@ -42,6 +42,7 @@ export default function AdminLogin() {
               value={credentials.username}
               onChange={(e) => setCredentials({...credentials, username: e.target.value})}
               required
+              className={styles.input}
             />
           </div>
           <div className={styles.formGroup}>

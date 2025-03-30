@@ -16,8 +16,8 @@ const NavbarSection = () => {
     
     const navText = [
         {title : "home", path : "/", icon: <AiFillHome/> },
-        {title : "Categories", path : "/categories/", icon: <TbCategoryPlus/> },
-        {title : "Carts", path : "/cart/", icon: <><FaCartArrowDown/>{totalItems > 0 && <span style={{
+        {title : "Categories", path : "/categories", icon: <TbCategoryPlus/> },
+        {title : "Carts", path : "/cart", icon: <><FaCartArrowDown/>{totalItems > 0 && <span style={{
             position: 'absolute',
             top: '-8px',
             right: '-8px',
