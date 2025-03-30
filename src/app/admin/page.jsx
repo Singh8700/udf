@@ -21,8 +21,8 @@ async function getProducts() {
 export default async function AdminPage() {
   try {
     // Basic auth check - in production, use proper authentication
-    const cookieStore = cookies();
-    const isAuthenticated = cookieStore.get('admin_authenticated');
+    const cookieStore = await cookies();
+    const isAuthenticated = await cookieStore.get('admin_authenticated');
     
     if (!isAuthenticated) {
       redirect('/admin/login');
