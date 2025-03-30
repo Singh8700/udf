@@ -13,7 +13,7 @@ const nextConfig = {
       },
     ],
   },
-  trailingSlash: true,
+  // trailingSlash: true,
 };
 
 export default nextConfig;

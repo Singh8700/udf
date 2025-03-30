@@ -122,10 +122,6 @@
     margin: 0; 
 }
 
-/* Firefox */
-.formGroup input[type=number] {
-    -moz-appearance: textfield;
-}
 
 .formGroup input,
 .formGroup textarea {
