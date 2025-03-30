@@ -300,7 +300,7 @@ export default function Cart() {
             <p>Start shopping to add items to your cart</p>
             <ShopNowButton
               as="a"
-              href="/categories/"
+              href="/udf/categories"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >

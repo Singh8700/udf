@@ -24,9 +24,7 @@ export default async function AdminPage() {
     const cookieStore = await cookies();
     const isAuthenticated = await cookieStore.get('admin_authenticated');
     
-    if (!isAuthenticated) {
-      redirect('/admin/login');
-    }
+   
 
     const products = await getProducts();
     return <AdminClient initialProducts={products} />;
