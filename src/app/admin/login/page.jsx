@@ -15,10 +15,11 @@ export default function AdminLogin() {
 
     // In a real application, validate against a secure backend
     // This is just a basic example
-    if (credentials.username === 'UDFAdmin' && credentials.password === 'UDF&Admin@7878') {
-      // Set a cookie to maintain session
-      document.cookie = 'admin_authenticated=true; path=/';
-      router.push('/admin');
+    if (credentials.username === 'admin' && credentials.password === 'admin@123') {
+      // Set a cookie to maintain session with the correct path for GitHub Pages
+      document.cookie = 'admin_authenticated=true; path=/udf/';
+      console.log('Cookie set:', document.cookie);
+      router.push('/udf/admin');
     } else {
       setError('Invalid credentials');
     }
