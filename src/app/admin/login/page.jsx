@@ -19,7 +19,7 @@ export default function AdminLogin() {
       // Set a cookie to maintain session with the correct path for GitHub Pages
       document.cookie = 'admin_authenticated=true; path=/udf/';
       console.log('Cookie set:', document.cookie);
-      router.push('/udf/admin');
+      router.push('/admin');
     } else {
       setError('Invalid credentials');
     }
