@@ -1,69 +1,80 @@
 'use client';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import styles from '../admin.module.css';
+import { useRouter } from 'next/navigation';
 
 export default function AdminLogin() {
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setError('');
+    try {
+      const res = await fetch(`${process.env.API_URL}/api/admin/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: 'include'
+      });
 
-    // In a real application, validate against a secure backend
-    // This is just a basic example
-    if (credentials.username === 'admin' && credentials.password === 'admin@123') {
-      // Set a cookie with the correct path for GitHub Pages deployment
-      document.cookie = 'admin_authenticated=true; path=/udf';
-      console.log('Cookie set:', document.cookie);
+      const data = await res.json();
       
-      // Use window.location for hard navigation to ensure cookie is set before redirect
-      window.location.href = '/udf/admin';
-    } else {
-      setError('Invalid credentials');
+      if (res.ok) {
+        localStorage.setItem('adminToken', data.token);
+        router.push('/udf/admin/dashboard');
+      } else {
+        setError(data.message);
+      }
+    } catch (err) {
+      setError('Connection error');
     }
   };
 
   return (
-    <div className={styles.loginContainer}>
-      <motion.div 
-        className={styles.loginBox}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <h1>Admin Login</h1>
-        {error && <div className={styles.error}>{error}</div>}
-        <form onSubmit={handleSubmit}>
-          <div className={styles.formGroup}>
-            <label>Username:</label>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-lg">
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            Admin Login
+          </h2>
+        </div>
+        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
+          {error && (
+            <div className="text-red-500 text-center">{error}</div>
+          )}
+          <div>
             <input
-              type="text"
-              value={credentials.username}
-              onChange={(e) => setCredentials({...credentials, username: e.target.value})}
+              type="email"
               required
-              className={styles.input}
+              className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div className={styles.formGroup}>
-            <label>Password:</label>
+          <div>
             <input
               type="password"
-              value={credentials.password}
-              onChange={(e) => setCredentials({...credentials, password: e.target.value})}
               required
+              className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <motion.button
-            type="submit"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Login
-          </motion.button>
+          <div>
+            <button
+              type="submit"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Sign in
+            </button>
+          </div>
         </form>
-      </motion.div>
+      </div>
     </div>
   );
 }
