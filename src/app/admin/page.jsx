@@ -25,13 +25,13 @@ export default async function AdminPage() {
     const isAuthenticated = cookieStore.get('admin_authenticated');
     
     if (!isAuthenticated) {
-      redirect('/udf/admin/login');
+      redirect('/admin/login');
     }
 
     const products = await getProducts();
     return <AdminClient initialProducts={products} />;
   } catch (error) {
     console.error('Error in AdminPage:', error);
-    redirect('/udf/admin/login');
+    redirect('/admin/login');
   }
 }

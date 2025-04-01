@@ -17,7 +17,7 @@ export default function AdminLogin() {
     // This is just a basic example
     if (credentials.username === 'admin' && credentials.password === 'admin@123') {
       // Set a cookie to maintain session with the correct path for GitHub Pages
-      document.cookie = 'admin_authenticated=true; path=/udf/';
+      document.cookie = 'admin_authenticated=true; path=/';
       console.log('Cookie set:', document.cookie);
       router.push('/admin');
     } else {
