@@ -19,7 +19,7 @@ export default function AdminLogin() {
       console.log('Cookie set:', document.cookie);
       
       // Use window.location for hard navigation to ensure cookie is set before redirect
-      window.location.href = '/admin';
+      window.location.href = '/udf/admin';
     } else {
       setError('Invalid credentials');
     }
