@@ -1,13 +1,11 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import styles from '../admin.module.css';
 
 export default function AdminLogin() {
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
-  const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,10 +14,12 @@ export default function AdminLogin() {
     // In a real application, validate against a secure backend
     // This is just a basic example
     if (credentials.username === 'admin' && credentials.password === 'admin@123') {
-      // Set a cookie to maintain session with the correct path for GitHub Pages
-      document.cookie = 'admin_authenticated=true; path=/';
+      // Set a cookie with the correct path for GitHub Pages deployment
+      document.cookie = 'admin_authenticated=true; path=/udf';
       console.log('Cookie set:', document.cookie);
-      router.push('/admin');
+      
+      // Use window.location for hard navigation to ensure cookie is set before redirect
+      window.location.href = '/admin';
     } else {
       setError('Invalid credentials');
     }
